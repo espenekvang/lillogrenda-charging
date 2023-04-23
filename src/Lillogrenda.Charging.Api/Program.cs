@@ -1,13 +1,11 @@
 global using FastEndpoints;
 using FastEndpoints.Swagger;
+using Lillogrenda.Charging.Api.Extensions;
+using Lillogrenda.Charging.Application.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddFastEndpoints();
-builder.Services.AddSwaggerDoc(settings =>
-{
-    settings.Title = "Lillogrenda.Charging.Api";
-    settings.Version = "v1";
-});
+builder.Services.AddApi();
+builder.Services.AddApplication();
 
 var app = builder.Build();
 app.UseAuthorization();
