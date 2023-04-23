@@ -14,6 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Lillogrenda.Charging.Application\Lillogrenda.Charging.Application.csproj" />
+      <ProjectReference Include="..\Lillogrenda.Charging.Infrastructure\Lillogrenda.Charging.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
