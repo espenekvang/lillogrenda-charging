@@ -4,5 +4,5 @@ namespace Lillogrenda.Charging.Domain.Services;
 
 public interface IChargingSystem
 {
-    IEnumerable<ChargingSession> GetChargingHistory();
+    Task<IEnumerable<ChargingSession>> GetChargingHistoryAsync(CancellationToken cancellationToken);
 }

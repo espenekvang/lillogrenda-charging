@@ -6,7 +6,7 @@ Make sure to have the following secrets set locally before running the applicati
 - zaptec-username
 - zaptec-password
 
-Add the secrets by running the following command for the API-project directory:
+Add the secrets by running the following command from the API-project directory:
 ```shell
 dotnet user-secrets set "{name-of-the-secret}" "{the-secret}"
 ```
