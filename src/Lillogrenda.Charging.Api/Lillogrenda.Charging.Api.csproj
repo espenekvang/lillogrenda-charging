@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+      <UserSecretsId>f622c399-96f9-4ece-bd2b-733f1f596332</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="FastEndpoints" Version="5.9.0" />
