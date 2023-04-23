@@ -12,9 +12,11 @@ internal class ZaptecChargingSystem : IChargingSystem
         _zaptecClient = zaptecClient;
     }
     
-    public async Task<IEnumerable<ChargingSession>> GetChargingHistoryAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<ChargingSession>> GetChargingHistoryAsync(string chargerId,
+        DateOnly from, DateOnly to,
+        CancellationToken cancellationToken)
     {
-        var chargeHistory = await _zaptecClient.GetChargeHistoryAsync(cancellationToken);
+        var chargeHistory = await _zaptecClient.GetChargeHistoryAsync(chargerId, from, to, cancellationToken);
         return new List<ChargingSession>();
     }
 }

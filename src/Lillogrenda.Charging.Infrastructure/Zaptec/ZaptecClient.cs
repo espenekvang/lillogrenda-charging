@@ -6,12 +6,12 @@ namespace Lillogrenda.Charging.Infrastructure.Zaptec;
 
 public class ZaptecClient
 {
-    private readonly HttpClient _client;
+    private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
 
-    public ZaptecClient(HttpClient client, IConfiguration configuration)
+    public ZaptecClient(HttpClient httpClient, IConfiguration configuration)
     {
-        _client = client;
+        _httpClient = httpClient;
         _configuration = configuration;
     }
 
@@ -24,22 +24,21 @@ public class ZaptecClient
             { "password", _configuration["zaptec-password"]! }
         };
 
-        var response = await _client.PostAsync("oauth/token", new FormUrlEncodedContent(values), cancellationToken);
+        var response = await _httpClient.PostAsync("oauth/token", new FormUrlEncodedContent(values), cancellationToken);
         var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
         var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseJson);
 
         return tokenResponse?.AccessToken ?? string.Empty;
     }
 
-    public async Task<ChargeHistory> GetChargeHistoryAsync(CancellationToken cancellationToken)
+    public async Task<ChargeHistory> GetChargeHistoryAsync(string chargerId, DateOnly from,
+        DateOnly to,
+        CancellationToken cancellationToken)
     {
         var token = await GetTokenAsync(cancellationToken);
-        const string chargerId = "e4041e79-fd28-4110-bbe6-a7a4eac157f4";
-        var from = new DateTime(2023, 01, 01);
-        var to = DateTimeOffset.Now;
-        _client.DefaultRequestHeaders.Clear();
-        _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-        var response = await _client.GetAsync($"api/chargehistory?ChargerId={chargerId}&From={from:s}&To={to:s}", cancellationToken);
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+        var response = await _httpClient.GetAsync($"api/chargehistory?ChargerId={chargerId}&From={from:s}&To={to:s}", cancellationToken);
 
         var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
         return JsonSerializer.Deserialize<ChargeHistory>(responseJson) ?? new ChargeHistory();
