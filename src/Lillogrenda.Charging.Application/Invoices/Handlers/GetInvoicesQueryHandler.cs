@@ -29,3 +29,4 @@ internal class GetInvoicesQueryHandler : IRequestHandler<GetInvoicesQuery, IEnum
         return Enumerable.Empty<Invoice>();
     }
 }
+
