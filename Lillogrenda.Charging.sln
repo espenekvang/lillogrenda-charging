@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{87289B65
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lillogrenda.Charging.Domain.UnitTests", "src\Lillogrenda.Charging.Domain.UnitTests\Lillogrenda.Charging.Domain.UnitTests.csproj", "{CDFECD04-FEBA-41B9-B65D-96E4C0B448E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lillogrenda.Charging.Application.UnitTests", "src\Lillogrenda.Charging.Application.UnitTests\Lillogrenda.Charging.Application.UnitTests.csproj", "{CABB688B-92D5-4F5C-A906-1D307131652A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,8 +40,13 @@ Global
 		{CDFECD04-FEBA-41B9-B65D-96E4C0B448E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDFECD04-FEBA-41B9-B65D-96E4C0B448E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDFECD04-FEBA-41B9-B65D-96E4C0B448E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CABB688B-92D5-4F5C-A906-1D307131652A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CABB688B-92D5-4F5C-A906-1D307131652A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CABB688B-92D5-4F5C-A906-1D307131652A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CABB688B-92D5-4F5C-A906-1D307131652A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CDFECD04-FEBA-41B9-B65D-96E4C0B448E1} = {87289B65-E5C9-4009-AC36-C7389DB4518F}
+		{CABB688B-92D5-4F5C-A906-1D307131652A} = {87289B65-E5C9-4009-AC36-C7389DB4518F}
 	EndGlobalSection
 EndGlobal
