@@ -1,9 +1,10 @@
 ﻿using Lillogrenda.Charging.Application.Invoices.Queries;
+using Lillogrenda.Charging.Domain.Entities;
 using MediatR;
 
 namespace Lillogrenda.Charging.Api.Invoices;
 
-public class InvoiceEndpoint : EndpointWithoutRequest<string>
+public class InvoiceEndpoint : EndpointWithoutRequest<IEnumerable<InvoiceLine>>
 {
     private readonly IMediator _mediator;
 
@@ -21,6 +22,6 @@ public class InvoiceEndpoint : EndpointWithoutRequest<string>
     public override async Task HandleAsync(CancellationToken ct)
     {
         var invoices = await _mediator.Send(new GetInvoicesQuery(), ct);
-        await SendStringAsync("Invoices", cancellation: ct);
+        await SendAsync(invoices, cancellation:ct);
     }
 }

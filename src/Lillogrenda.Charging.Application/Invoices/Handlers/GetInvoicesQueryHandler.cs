@@ -5,30 +5,30 @@ using MediatR;
 
 namespace Lillogrenda.Charging.Application.Invoices.Handlers;
 
-internal class GetInvoicesQueryHandler : IRequestHandler<GetInvoicesQuery, IEnumerable<Invoice>>
+internal class GetInvoicesQueryHandler : IRequestHandler<GetInvoicesQuery, IEnumerable<InvoiceLine>>
 {
     private readonly IChargingSystem _chargingSystem;
     private readonly IPriceService _priceService;
-    private readonly ChargingHourExtractor _chargingHourExtractor;
+    private readonly InvoiceCalculator _invoiceCalculator;
 
-    public GetInvoicesQueryHandler(IChargingSystem chargingSystem, IPriceService priceService, ChargingHourExtractor chargingHourExtractor)
+    public GetInvoicesQueryHandler(
+        IChargingSystem chargingSystem, 
+        IPriceService priceService, 
+        InvoiceCalculator invoiceCalculator)
     {
         _chargingSystem = chargingSystem;
         _priceService = priceService;
-        _chargingHourExtractor = chargingHourExtractor;
+        _invoiceCalculator = invoiceCalculator;
     }
     
-    public async Task<IEnumerable<Invoice>> Handle(GetInvoicesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<InvoiceLine>> Handle(GetInvoicesQuery request, CancellationToken cancellationToken)
     {
         var chargingSessions = await _chargingSystem.GetChargingHistoryAsync(
             "e4041e79-fd28-4110-bbe6-a7a4eac157f4",
             new DateOnly(2023, 01, 01), 
-            new DateOnly(2023, 04, 23), 
+            new DateOnly(2023, 04, 26), 
             cancellationToken);
-        var chargingHours = _chargingHourExtractor.ExtractFrom(chargingSessions);
-        var prices = await _priceService.GetPricesAsync(new DateOnly(2023, 04, 23), cancellationToken);
-        var prices2 = await _priceService.GetPricesAsync(new DateOnly(2023, 04, 23), cancellationToken);
-        return Enumerable.Empty<Invoice>();
+        return await _invoiceCalculator.CalculateForAsync(chargingSessions, cancellationToken);
     }
 }
 

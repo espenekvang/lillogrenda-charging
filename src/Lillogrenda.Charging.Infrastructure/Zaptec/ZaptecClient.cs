@@ -38,7 +38,7 @@ public class ZaptecClient
         var token = await GetTokenAsync(cancellationToken);
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-        var response = await _httpClient.GetAsync($"api/chargehistory?ChargerId={chargerId}&From={from:s}&To={to:s}", cancellationToken);
+        var response = await _httpClient.GetAsync($"api/chargehistory?ChargerId={chargerId}&From={from.ToString("yyyy-MM-dd")}&To={to.ToString("yyyy-MM-dd")}", cancellationToken);
 
         var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
         return JsonSerializer.Deserialize<ChargeHistory>(responseJson) ?? new ChargeHistory();

@@ -17,6 +17,11 @@ internal class ZaptecChargingSystem : IChargingSystem
         CancellationToken cancellationToken)
     {
         var chargeHistory = await _zaptecClient.GetChargeHistoryAsync(chargerId, from, to, cancellationToken);
-        return new List<ChargingSession>();
+        return chargeHistory.Data.Select(session => new ChargingSession
+        {
+            Start = session.StartDateTime,
+            End = session.EndDateTime,
+            EnergyInkWh = session.Energy
+        });
     }
 }

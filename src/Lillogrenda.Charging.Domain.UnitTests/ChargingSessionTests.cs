@@ -17,7 +17,7 @@ public class ChargingSessionTests
         };
 
         //act
-        var energyPerHour = session.GetEnergyPerHour();
+        var energyPerHour = session.GetKwPerMinute();
 
         //assert
         energyPerHour.Should().Be(10);
@@ -35,7 +35,7 @@ public class ChargingSessionTests
         };
 
         //act
-        var energyPerHour = session.GetEnergyPerHour();
+        var energyPerHour = session.GetKwPerMinute();
 
         //assert
         energyPerHour.Should().Be(5);
@@ -53,7 +53,7 @@ public class ChargingSessionTests
         };
 
         //act
-        var energyPerHour = session.GetEnergyPerHour();
+        var energyPerHour = session.GetKwPerMinute();
 
         //assert
         energyPerHour.Should().Be(10);

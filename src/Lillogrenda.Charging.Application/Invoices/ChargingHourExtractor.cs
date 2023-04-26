@@ -12,12 +12,7 @@ internal class ChargingHourExtractor
         _priceService = priceService;
     }
     
-    public IEnumerable<ChargingHour> ExtractFrom(IEnumerable<ChargingSession> chargingSessions)
-    {
-        return chargingSessions.SelectMany(GetChargingHours);
-    }
-
-    private static IEnumerable<ChargingHour> GetChargingHours(ChargingSession chargingSession)
+    public async Task<IEnumerable<ChargingHour>> ExtractFromAsync(ChargingSession chargingSession, CancellationToken cancellationToken)
     {
         var nextHour = chargingSession.Start
             .AddHours(1)
@@ -31,7 +26,9 @@ internal class ChargingHourExtractor
         {
             Date = new DateOnly(chargingSession.Start.Year, chargingSession.Start.Month, chargingSession.Start.Day),
             Hour = chargingSession.Start.Hour,
-            ChargeFactor = GetChargeFactor(chargingSession.Start, nextHour)
+            MinutesCharged = GetMinutesCharged(chargingSession.Start, nextHour),
+            PricePerkWh = await GetPricePerKwhAsync(chargingSession.Start, cancellationToken),
+            KwPerMinute = chargingSession.GetKwPerMinute()
         };
         
         chargingHours.Add(chargingHour);
@@ -42,7 +39,9 @@ internal class ChargingHourExtractor
             {
                 Date = new DateOnly(nextHour.Year, nextHour.Month, nextHour.Day),
                 Hour = nextHour.Hour,
-                ChargeFactor = GetChargeFactor(nextHour, chargingSession.End)
+                MinutesCharged = GetMinutesCharged(nextHour, chargingSession.End < nextHour.AddHours(1) ? chargingSession.End : nextHour.AddHours(1)),
+                PricePerkWh = await GetPricePerKwhAsync(nextHour, cancellationToken),
+                KwPerMinute = chargingSession.GetKwPerMinute()
             });
             nextHour = nextHour.AddHours(1);
         }
@@ -50,15 +49,17 @@ internal class ChargingHourExtractor
         return chargingHours;
     }
 
-    private static double GetChargeFactor(DateTimeOffset from, DateTimeOffset to)
+    private async Task<double> GetPricePerKwhAsync(DateTimeOffset start, CancellationToken cancellationToken)
+    {
+        var prices = await _priceService.GetPricesAsync(new DateOnly(start.Year, start.Month, start.Day),
+            cancellationToken);
+        var price = prices.First(p => p.Start.Hour == start.Hour);
+        return price.PricePerkWh;
+    }
+
+    private static double GetMinutesCharged(DateTimeOffset from, DateTimeOffset to)
     {
         var duration = to - from;
-        var oneHour = new TimeSpan(0, 1, 0, 0);
-        if (duration >= oneHour)
-        {
-            return 1;
-        }
-
-        return duration.TotalSeconds / oneHour.TotalSeconds;
+        return duration.TotalMinutes;
     }
 }

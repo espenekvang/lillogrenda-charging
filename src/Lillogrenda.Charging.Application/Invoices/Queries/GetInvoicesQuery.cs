@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Lillogrenda.Charging.Application.Invoices.Queries;
 
-public class GetInvoicesQuery : IRequest<IEnumerable<Invoice>>
+public class GetInvoicesQuery : IRequest<IEnumerable<InvoiceLine>>
 {
     
 }

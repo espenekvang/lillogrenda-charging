@@ -10,7 +10,7 @@ namespace Lillogrenda.Charging.Application.UnitTests.Invoices;
 public class ChargingHourExtractorTests
 {
     [Fact]
-    public void OneAndAHalfHourTwoChargingHoursReturned()
+    public async Task OneAndAHalfHourTwoChargingHoursReturned()
     {
         //arrange
         var session = new ChargingSession
@@ -21,10 +21,16 @@ public class ChargingHourExtractorTests
         };
 
         var priceService = A.Fake<IPriceService>();
+        A.CallTo(() => priceService.GetPricesAsync(A<DateOnly>.Ignored, A<CancellationToken>.Ignored))
+            .Returns(new List<EnergyPrice>
+            {
+                new(session.Start, session.Start.AddMinutes(59), 10, Currency.Nok),
+                new(session.End.AddMinutes(-30), session.End.AddMinutes(29), 20, Currency.Nok),
+            });
         var extractor = new ChargingHourExtractor(priceService);
 
         //act
-        var chargingHours = extractor.ExtractFrom(new[] { session }).ToList();
+        var chargingHours = (await extractor.ExtractFromAsync( session, CancellationToken.None)).ToList();
 
         //assert
         chargingHours.Should().HaveCount(2);

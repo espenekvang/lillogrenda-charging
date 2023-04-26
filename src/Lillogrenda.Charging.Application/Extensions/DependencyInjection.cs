@@ -10,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddTransient<ChargingHourExtractor>();
+        services.AddTransient<InvoiceCalculator>();
         return services;
     }
 }
